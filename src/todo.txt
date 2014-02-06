@@ -1,0 +1,42 @@
+* rgb-yuv conversion in fixed point 4096, using shift instead of divide
+* rewrite vertical filter pass to be cache friendly
+* do some kind of radix sort for coef removing:
+  - precompute max coeff
+  - use a fixed-size table (64k entries ?)
+  - add each pixel(+coeff?) to appropriate entry
+  - clear pixels until coef clearing reached
+* look at others coef computing/clearing methods
+* eye is more sensible
+  - to dark values than to light ones
+  - to low changes than to high ones (from dark to light changing +200 to +150 is not a big mistake)
+  use this parameter to adjust qualtification
+* update config dialog:
+  - I frame rate
+  - quality
+* Every resolutions
+* clean sources:
+  - bitmap types
+  - custom memory allocation
+  - pre allocate every memory
+  - allocate enough memory for RL0 and AE coding
+  - move codec for custom file
+  - split user/internal headers
+* yuy2 etc... modes
+* sqrt(2) check
+* fix logs still appears
+
+
+Later:
+* A/RGB modes (see http://en.wikipedia.org/wiki/Adaptive_Scalable_Texture_Compression modes)
+* yuyv, ... input modes
+* lossless mode
+* CDF 9/7
+* think about HDR modes ? (z videos ?)
+* delta frame noise fix
+* CDF 5/3 fix
+* resolution: switch copy for delta
+* uint/ushort encoding ?
+* multiframe batch encoding 3D
+
+Look for documentation
+* motion vectors
