@@ -1,0 +1,4 @@
+LIBRARY         LIGHTHAAR
+
+EXPORTS
+	DriverProc

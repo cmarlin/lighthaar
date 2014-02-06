@@ -1,0 +1,58 @@
+;
+; LightHaar AVI video codec
+;
+; Copyright (c) 2012 Cyril Marlin & Mathieu Legris
+;
+; This Windows 9x Installation INF File by Rainbow Software
+;
+[version]
+signature="$CHICAGO$"
+
+[DefaultInstall]
+CopyFiles=HUF.Files.Inf,HUF.Files.Dll
+AddReg=HUF.Reg
+UpdateInis=HUF.INIs
+
+[DefaultUnInstall]
+DelFiles=HUF.Files.Dll,HUF.Files.Inf,HUF.Files.Ini
+DelReg=HUF.Reg
+UpdateInis=HUF.INIs.Del
+
+[SourceDisksNames]
+1="LightHaar AVI lossless video codec","",1
+
+[SourceDisksFiles]
+LIGHTHAAR.INF=1
+LIGHTHAAR.DLL=1
+
+[DestinationDirs]
+HUF.Files.Inf=17
+HUF.Files.Dll=11
+HUF.Files.Ini=25
+
+[HUF.Files.Inf]
+LIGHTHAAR.INF
+
+[HUF.Files.Dll]
+LIGHTHAAR.DLL
+
+[HUF.Files.Ini]
+LIGHTHAAR.INI
+
+[HUF.Reg]
+HKLM,SYSTEM\CurrentControlSet\Control\MediaResources\icm\VIDC.LGTH,Description,,"LightHaar lossless codec [LGTH]"
+HKLM,SYSTEM\CurrentControlSet\Control\MediaResources\icm\VIDC.LGTH,Driver,,"lighthaar.dll"
+HKLM,SYSTEM\CurrentControlSet\Control\MediaResources\icm\VIDC.LGTH,FriendlyName,,"LightHaar lossless codec [LGTH]"
+
+HKLM,"Software\Microsoft\Windows NT\CurrentVersion\drivers.desc",lighthaar.dll,,"LightHaar codec [LGTH]"
+HKLM,"Software\Microsoft\Windows NT\CurrentVersion\Drivers32",VIDC.LGTH,,"lighthaar.dll"
+
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\LIGHTHAAR
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\LIGHTHAAR,DisplayName,,"LightHaar AVI lossless video codec (Remove Only)"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\LIGHTHAAR,UninstallString,,"rundll.exe setupx.dll,InstallHinfSection DefaultUninstall 132 %17%\LIGHTHAAR.INF"
+
+[HUF.INIs]
+system.ini, drivers32,, "VIDC.LGTH=lighthaar.dll"
+
+[HUF.INIs.Del]
+system.ini, drivers32, "VIDC.LGTH=lighthaar.dll"
