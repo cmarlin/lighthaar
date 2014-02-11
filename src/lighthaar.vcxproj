@@ -139,8 +139,9 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Arith.cpp" />
+    <ClCompile Include="arith.cpp" />
     <ClCompile Include="codec_rl0.cpp" />
+    <ClCompile Include="codec_yuv.cpp" />
     <ClCompile Include="drvproc.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -153,9 +154,11 @@
   <ItemGroup>
     <ClInclude Include="arith.h" />
     <ClInclude Include="codec_rl0.h" />
+    <ClInclude Include="codec_yuv.h" />
     <ClInclude Include="lighthaar.h" />
     <ClInclude Include="lighthaarWrapperWin32.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="lighthaar.rc" />
