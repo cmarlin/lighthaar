@@ -1,6 +1,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "stdint.h"
+
+
 template<typename t> inline t clamp(t x, t min=0, t max=UCHAR_MAX)
 {
 	return (x<max)?(x>=min?x:min):max;
@@ -56,5 +59,31 @@ template<typename t> t NextLargerPowerOf2(t n)
 	}
 	return n + 1;
 }
+
+//////////////////////////////////////////////////////////////////////////
+#define ALIGN_PREDECL(x) __declspec(align(x))
+
+//////////////////////////////////////////////////////////////////////////
+void sub_buffer(
+				ALIGN_PREDECL(4) int8_t* __restrict _Dest,
+				ALIGN_PREDECL(4) const int8_t * const _A,
+				ALIGN_PREDECL(4) const int8_t * const _B,
+				const int _width,
+				const int _height);
+
+void add_buffer(
+				ALIGN_PREDECL(4) int8_t* __restrict _Dest,
+				ALIGN_PREDECL(4) const int8_t * __restrict const _A,
+				ALIGN_PREDECL(4) const int8_t * __restrict const _B, 
+				const int _width,
+				const int _height);
+
+//////////////////////////////////////////////////////////////////////////
+void shift_u8_to_s8(uint8_t* _ImgData, int _width, int _height);
+void shift_s8_to_u8(uint8_t* _ImgData, int _width, int _height);
+
+//////////////////////////////////////////////////////////////////////////
+double PSNR (uint8_t *p1, uint8_t *p2, int _size);
+double SHIFT(uint8_t *p1, uint8_t *p2, int _size);
 
 #endif //UTILS_H

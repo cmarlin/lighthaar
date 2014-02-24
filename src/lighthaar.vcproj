@@ -4,6 +4,7 @@
 	Version="9,00"
 	Name="lighthaar"
 	ProjectGUID="{F8E154D0-B588-4471-A9A9-FF3CB1E053C2}"
+	RootNamespace="lighthaar"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -16,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../distrib"
+			OutputDirectory="c:/distrib"
 			IntermediateDirectory=".\Debug"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -110,7 +111,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../distrib"
+			OutputDirectory="c:/distrib"
 			IntermediateDirectory=".\Release"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -208,11 +209,27 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\Arith.cpp"
+			RelativePath=".\arith.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\arith.h"
+			>
+		</File>
+		<File
+			RelativePath=".\codec_cdf53.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\codec_cdf53.h"
+			>
+		</File>
+		<File
+			RelativePath=".\codec_haar.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\codec_haar.h"
 			>
 		</File>
 		<File
@@ -279,6 +296,14 @@
 		</File>
 		<File
 			RelativePath="resource.h"
+			>
+		</File>
+		<File
+			RelativePath=".\utils.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\utils.h"
 			>
 		</File>
 	</Files>

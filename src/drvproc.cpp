@@ -1,5 +1,8 @@
 //
-// Huffyuv v2.1.1, by Ben Rudiak-Gould.
+// LightHaar by Cyril Marlin and Mathieu Legris
+// https://code.google.com/p/lighthaar/
+//
+// Based on Huffyuv v2.1.1, by Ben Rudiak-Gould.
 // http://www.math.berkeley.edu/~benrg/huffyuv.html
 //
 // Based on MSYUV sample code, which is:

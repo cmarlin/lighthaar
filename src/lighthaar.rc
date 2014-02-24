@@ -43,12 +43,12 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "See http://www.math.berkeley.edu/~benrg/huffyuv.html"
+            VALUE "Comments", "See https://code.google.com/p/lighthaar/"
             VALUE "CompanyName", "Disappearing Inc."
             VALUE "FileDescription", "LightHaar lossless video codec"
             VALUE "FileVersion", "0.1"
             VALUE "InternalName", "LightHaar"
-            VALUE "LegalCopyright", "Copyright © 2012 Cyril Marlin & Mathieu Legris."
+            VALUE "LegalCopyright", "Copyright © 2012-14 Cyril Marlin & Mathieu Legris."
             VALUE "OriginalFilename", "lighthaar.dll"
             VALUE "ProductName", "LightHaar"
             VALUE "ProductVersion", "0.1"

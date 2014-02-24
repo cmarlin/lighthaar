@@ -29,3 +29,13 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
+
+*.dsp
+*.sdf
+*.old
+
+[Ll]ocal
+_UpgradeReport_Files
+ipch
+*.zip
+*.avi

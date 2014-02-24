@@ -21,8 +21,6 @@ namespace LightHaar
 	typedef void  (*LightHaarFree)(intptr_t iUser, void* ptr);
 	void SetAllocator(LightHaarAlloc pAllocFunc, LightHaarFree pFreeFunc, intptr_t iUser);
 
-#define ALIGN_PREDECL(x) __declspec(align(x))
-
 	enum FrameType
 	{
 		I_Frame=0,		// intra (fully descriptive)
@@ -51,6 +49,7 @@ namespace LightHaar
 	struct FrameInfo : BaseObj
 	{
 		FrameType	m_iFrameType;
+		int			m_iQuality;
 	};
 
 	struct FrameBuffer : BaseObj
@@ -96,32 +95,6 @@ namespace LightHaar
 		*/
 	};
 }
-
-/// todo: add pitch, move to -yuv- files
-void ConvertRGB24toYCrCb(int8_t* _pY, int8_t* _pU, int8_t* _pV, const uint8_t* _pRGB, int _width, int _height);
-void ConvertYCrCbtoRGB24(uint8_t* _pRGB, const int8_t* _pY, const int8_t* _pU, const int8_t* _pV, int _width, int _height);
-
-int HaarIterations(int _width, int _height);
-void EncodeHaar(int8_t* _dst, const int8_t *_src, int _width, int _height, int _quality=1);
-void DecodeHaar(int8_t* _dst, const int8_t *_src, int _width, int _height);
-int64_t EnergyHaarCoeff(const int8_t * const _src, int _width, int _height);
-
-void sub_buffer(
-				ALIGN_PREDECL(4) int8_t* __restrict _Dest,
-				ALIGN_PREDECL(4) const int8_t * const _A,
-				ALIGN_PREDECL(4) const int8_t * const _B,
-				const int _width,
-				const int _height);
-
-void add_buffer(
-				ALIGN_PREDECL(4) int8_t* __restrict _Dest,
-				ALIGN_PREDECL(4) const int8_t * __restrict const _A,
-				ALIGN_PREDECL(4) const int8_t * __restrict const _B, 
-				const int _width,
-				const int _height);
-
-void shift_u8_to_s8(uint8_t* _ImgData, int _width, int _height);
-void shift_s8_to_u8(uint8_t* _ImgData, int _width, int _height);
 
 
 #endif // LIGHTHAAR_H

@@ -3,7 +3,6 @@
 
 void ConvertRGB24toYCrCb(int8_t* _pY, int8_t* _pU, int8_t* _pV, const uint8_t* _pRGB, int _width, int _height)
 {
-	// 219 ???
 	const int cyb = int(0.114f*4096.f);
 	const int cyg = int(0.587f*4096.f);
 	const int cyr = int(0.299f*4096.f);

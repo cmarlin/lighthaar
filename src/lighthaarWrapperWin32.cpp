@@ -18,8 +18,11 @@
 //#include <pair>
 #include <limits.h>
 
-#include "Arith.h"
+#include "arith.h"
 #include "codec_rl0.h"
+#include "codec_yuv.h"
+#include "codec_cdf53.h"
+#include "utils.h"
 
 TCHAR szDescription[] = TEXT("LightHaar v0.1");
 TCHAR szName[]        = TEXT("LightHaar");
@@ -647,8 +650,8 @@ DWORD CodecInst::Compress(ICCOMPRESS* icinfo, DWORD dwSize)
 
 			int iWidth = icinfo->lpbiInput->biWidth;
 			int iHeight = icinfo->lpbiInput->biHeight;
-			int iHaarQuality = m_oCodec.m_iHaarQuality;
-			//iHaarQuality = 1;
+			oFrameInfo.m_iQuality = m_oCodec.m_iHaarQuality; // we can adjust quality to mach bitrate
+			//oFrameInfo.m_iQuality = 1; // for test
 
 			// YUV space is half size the RGB one, so convert datas!
 			ConvertRGB24toYCrCb(
@@ -712,12 +715,12 @@ DWORD CodecInst::Compress(ICCOMPRESS* icinfo, DWORD dwSize)
 			out_end += sizeof(FrameInfo);
 
 			// convert color buffers to haar coefficients
-			EncodeHaar(m_oCodec.m_frameBuffers[iEncodeBuffer].m_y,
-				m_oCodec.m_frameBuffers[iEncodeBuffer].m_y, iWidth, iHeight, iHaarQuality);
-			EncodeHaar(m_oCodec.m_frameBuffers[iEncodeBuffer].m_u,
-				m_oCodec.m_frameBuffers[iEncodeBuffer].m_u, iWidth>>1, iHeight>>1, iHaarQuality);
-			EncodeHaar(m_oCodec.m_frameBuffers[iEncodeBuffer].m_v,
-				m_oCodec.m_frameBuffers[iEncodeBuffer].m_v, iWidth>>1, iHeight>>1, iHaarQuality);
+			EncodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_y,
+				m_oCodec.m_frameBuffers[iEncodeBuffer].m_y, iWidth, iHeight, oFrameInfo.m_iQuality);
+			EncodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_u,
+				m_oCodec.m_frameBuffers[iEncodeBuffer].m_u, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
+			EncodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_v,
+				m_oCodec.m_frameBuffers[iEncodeBuffer].m_v, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
 
 			int iSize = iWidth*iHeight;
 			int iSizeUV = iSize>>2;
@@ -759,21 +762,21 @@ DWORD CodecInst::Compress(ICCOMPRESS* icinfo, DWORD dwSize)
 			// decompress current frame with compression artefacts/errors
 			if(oFrameInfo.m_iFrameType == I_Frame)
 			{
-				DecodeHaar(m_oCodec.m_frameBuffers[iEncodeBuffer].m_y,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_y, iWidth, iHeight);
-				DecodeHaar(m_oCodec.m_frameBuffers[iEncodeBuffer].m_u,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_u, iWidth>>1, iHeight>>1);
-				DecodeHaar(m_oCodec.m_frameBuffers[iEncodeBuffer].m_v,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_v, iWidth>>1, iHeight>>1);
+				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_y,
+					m_oCodec.m_frameBuffers[iEncodeBuffer].m_y, iWidth, iHeight, oFrameInfo.m_iQuality);
+				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_u,
+					m_oCodec.m_frameBuffers[iEncodeBuffer].m_u, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
+				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_v,
+					m_oCodec.m_frameBuffers[iEncodeBuffer].m_v, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
 			}
 			else if(oFrameInfo.m_iFrameType == P_Frame)
 			{
-				DecodeHaar(m_oCodec.m_frameBuffers[iEncodeBuffer].m_y,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_y, iWidth, iHeight);
-				DecodeHaar(m_oCodec.m_frameBuffers[iEncodeBuffer].m_u,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_u, iWidth>>1, iHeight>>1);
-				DecodeHaar(m_oCodec.m_frameBuffers[iEncodeBuffer].m_v,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_v, iWidth>>1, iHeight>>1);
+				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_y,
+					m_oCodec.m_frameBuffers[iEncodeBuffer].m_y, iWidth, iHeight, oFrameInfo.m_iQuality);
+				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_u,
+					m_oCodec.m_frameBuffers[iEncodeBuffer].m_u, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
+				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_v,
+					m_oCodec.m_frameBuffers[iEncodeBuffer].m_v, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
 
 				add_buffer(
 					m_oCodec.m_frameBuffers[m_oCodec.m_curFrameBuffer].m_y,
@@ -1129,12 +1132,12 @@ DWORD CodecInst::Decompress(ICDECOMPRESS* icinfo, DWORD dwSize)
 
 		delete pRL0Buffer;
 
-		DecodeHaar(m_oCodec.m_frameBuffers[iDecodeBuffer].m_y,
-			m_oCodec.m_frameBuffers[iDecodeBuffer].m_y, iWidth, iHeight);
-		DecodeHaar(m_oCodec.m_frameBuffers[iDecodeBuffer].m_u,
-			m_oCodec.m_frameBuffers[iDecodeBuffer].m_u, iWidth>>1, iHeight>>1);
-		DecodeHaar(m_oCodec.m_frameBuffers[iDecodeBuffer].m_v,
-			m_oCodec.m_frameBuffers[iDecodeBuffer].m_v, iWidth>>1, iHeight>>1);
+		DecodeCDF53(m_oCodec.m_frameBuffers[iDecodeBuffer].m_y,
+			m_oCodec.m_frameBuffers[iDecodeBuffer].m_y, iWidth, iHeight, oFrameInfo.m_iQuality);
+		DecodeCDF53(m_oCodec.m_frameBuffers[iDecodeBuffer].m_u,
+			m_oCodec.m_frameBuffers[iDecodeBuffer].m_u, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
+		DecodeCDF53(m_oCodec.m_frameBuffers[iDecodeBuffer].m_v,
+			m_oCodec.m_frameBuffers[iDecodeBuffer].m_v, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
 
 		if(oFrameInfo.m_iFrameType == I_Frame)
 		{
