@@ -36,32 +36,14 @@ void sub_buffer(
 				const int _width,
 				const int _height)
 {
-	//long long iPosAcc=0;
-	//int iPosCount=0;
-	//long long iNegAcc=0;
-	//int iNegCount=0;
-
 	for(int j=0; j<_height; ++j)
 	{
 		for(int i=0; i<_width; ++i)
 		{
 			int iOffset = j*_width+i;
 			_dst[iOffset] = SClamp((_a[iOffset] - _b[iOffset]), SCHAR_MIN, SCHAR_MAX);
-			//_Dest[iOffset] = SClamp((int8_t(_A[iOffset]) - int8_t(_B[iOffset]))/2, SCHAR_MIN, SCHAR_MAX);
-			//if(_Dest[iOffset]>0)
-			//{
-			//	iPosAcc += _Dest[iOffset];
-			//	iPosCount ++;
-			//}
-			//else if(_Dest[iOffset]<0)
-			//{
-			//	iNegAcc += _Dest[iOffset];
-			//	iNegCount ++;
-			//}
 		}
 	}
-	//int iPosAvg = iPosAcc/iPosCount;
-	//int iNegAvg = iNegAcc/iNegCount;
 }
 /*
 void add_post_filter(
@@ -87,16 +69,9 @@ void add_buffer(
 		{
 			int iOffset = j*_width+i;
 			_dst[iOffset] = SClamp(_a[iOffset] + (_b[iOffset]), SCHAR_MIN, SCHAR_MAX);
-			//_dst[iOffset] = SClamp(_a[iOffset]+_b[iOffset]*2, SCHAR_MIN, SCHAR_MAX);
-			_dst[iOffset] = clamp<int8_t>(_a[iOffset] + (_b[iOffset]));
+			//_dst[iOffset] = clamp<int8_t>(_a[iOffset] + (_b[iOffset]));
 		}
 	}
-	// test post filtering
-	//static bool bPostFilter = false;
-	//if(bPostFilter)
-	//{
-	//	add_post_filter(_dst, _dst, _b, _width, _height);
-	//}
 }
 /*
 void add_post_filter(

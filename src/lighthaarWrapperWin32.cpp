@@ -15,7 +15,6 @@
 #include <crtdbg.h>
 #include <algorithm>
 #include <vector>
-//#include <pair>
 #include <limits.h>
 
 #include "arith.h"
@@ -760,24 +759,15 @@ DWORD CodecInst::Compress(ICCOMPRESS* icinfo, DWORD dwSize)
 
 			// needed for next frame encoding, in cas of delta encoding
 			// decompress current frame with compression artefacts/errors
-			if(oFrameInfo.m_iFrameType == I_Frame)
-			{
-				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_y,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_y, iWidth, iHeight, oFrameInfo.m_iQuality);
-				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_u,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_u, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
-				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_v,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_v, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
-			}
-			else if(oFrameInfo.m_iFrameType == P_Frame)
-			{
-				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_y,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_y, iWidth, iHeight, oFrameInfo.m_iQuality);
-				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_u,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_u, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
-				DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_v,
-					m_oCodec.m_frameBuffers[iEncodeBuffer].m_v, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
+			DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_y,
+				m_oCodec.m_frameBuffers[iEncodeBuffer].m_y, iWidth, iHeight, oFrameInfo.m_iQuality);
+			DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_u,
+				m_oCodec.m_frameBuffers[iEncodeBuffer].m_u, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
+			DecodeCDF53(m_oCodec.m_frameBuffers[iEncodeBuffer].m_v,
+				m_oCodec.m_frameBuffers[iEncodeBuffer].m_v, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
 
+			if(oFrameInfo.m_iFrameType == P_Frame)
+			{
 				add_buffer(
 					m_oCodec.m_frameBuffers[m_oCodec.m_curFrameBuffer].m_y,
 					m_oCodec.m_frameBuffers[iPreviousBuffer].m_y,
@@ -1139,17 +1129,7 @@ DWORD CodecInst::Decompress(ICDECOMPRESS* icinfo, DWORD dwSize)
 		DecodeCDF53(m_oCodec.m_frameBuffers[iDecodeBuffer].m_v,
 			m_oCodec.m_frameBuffers[iDecodeBuffer].m_v, iWidth>>1, iHeight>>1, oFrameInfo.m_iQuality);
 
-		if(oFrameInfo.m_iFrameType == I_Frame)
-		{
-		// Haar coefficients to color conversion
-		//DecodeHaar(m_oCodec.m_frameBuffers[iDisplayBuffer].m_y,
-		//	m_oCodec.m_frameBuffers[m_oCodec.m_curFrameBuffer].m_y, iWidth, iHeight);
-		//DecodeHaar(m_oCodec.m_frameBuffers[iDisplayBuffer].m_u,
-		//	m_oCodec.m_frameBuffers[m_oCodec.m_curFrameBuffer].m_u, iWidth>>1, iHeight>>1);
-		//DecodeHaar(m_oCodec.m_frameBuffers[iDisplayBuffer].m_v,
-		//	m_oCodec.m_frameBuffers[m_oCodec.m_curFrameBuffer].m_v, iWidth>>1, iHeight>>1);
-		}
-		else if(oFrameInfo.m_iFrameType == P_Frame)
+		if(oFrameInfo.m_iFrameType == P_Frame)
 		{
 			// combine with previous buffer to get current one
 			add_buffer(
@@ -1172,13 +1152,6 @@ DWORD CodecInst::Decompress(ICDECOMPRESS* icinfo, DWORD dwSize)
 				m_oCodec.m_frameBuffers[iDecodeBuffer].m_v,
 				iWidth>>1,
 				iHeight>>1);
-
-		//DecodeHaar(m_oCodec.m_frameBuffers[iDisplayBuffer].m_y,
-		//	m_oCodec.m_frameBuffers[m_oCodec.m_curFrameBuffer].m_y, iWidth, iHeight);
-		//DecodeHaar(m_oCodec.m_frameBuffers[iDisplayBuffer].m_u,
-		//	m_oCodec.m_frameBuffers[m_oCodec.m_curFrameBuffer].m_u, iWidth>>1, iHeight>>1);
-		//DecodeHaar(m_oCodec.m_frameBuffers[iDisplayBuffer].m_v,
-		//	m_oCodec.m_frameBuffers[m_oCodec.m_curFrameBuffer].m_v, iWidth>>1, iHeight>>1);
 		}
 
 		// YUV conversion 
